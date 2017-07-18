@@ -23,4 +23,20 @@ ul,li {
   list-style: none;
 }
 
+a {
+  text-decoration: none;
+  display: inline-block;
+}
+.clearfix:after {
+  display: block;
+  width: 0;
+  height: 0;
+  content: 0;
+  visibility: hidden;
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+}
 </style>

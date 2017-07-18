@@ -8,7 +8,7 @@
       <div class="content block">
         <div class="advantage">
           <h3 class="black-title">平台优势</h3>
-          <ul class="advantage-list">
+          <ul class="advantage-list clearfix">
             <li v-for="item in advantage">
               <div class="list-info">
                 <p class="adva-title">{{item.advaTitle}}</p>
@@ -24,7 +24,7 @@
 
         <div class="info block">
           <h3 class="black-title">平台数据</h3>
-          <ul class="info-list">
+          <ul class="info-list clearfix">
             <li v-for="item in info">
               <div class="list-info">
                 <img :src="item.infoIcon" alt="">
@@ -39,12 +39,12 @@
         <div class="award block">
           <h3 class="black-title">应用获奖</h3>
           <p class="small-title">来自各大应用商店和榜单的肯定</p>
-          <ul class="award-list">
+          <ul class="award-list clearfix">
             <li v-for="item in awardList">
               <div class="list-award">
                 <img :src="item.awardIcon" alt="">
                 <p class="small-title">{{item.awardTitle}}</p>
-                <button class="view-datail">查看详情</button>
+                <div v-if="item.show"><a :href="item.awardUrl" class="view-detail">查看详情</a></div> 
               </div>
             </li>
           </ul>
@@ -54,12 +54,13 @@
         <div class="exposure block">
           <h3 class="black-title">媒体曝光</h3>
           <p class="small-title">来自众多媒体平台的肯定</p>
-          <ul class="exposure-list">
+          <ul class="exposure-list clearfix">
             <li v-for="item in exposure">
-              <div class="list-exposure">
-                <img :src="item.exposureIcon" alt="">
-                <p class="small-title">{{item.exposureTitle}}</p>
-                <button class="view-datail">查看详情</button>
+              <div class="item">
+                <img :src="item.exposureIcon" :alt="item.exposureIcon"
+                class="distance">
+                <div class="title">{{item.exposureTitle}}</div>
+                <div><a :href="item.exposureUrl" class="view-detail">查看详情</a></div>
               </div>
             </li>
           </ul>
@@ -70,11 +71,12 @@
           <div class="top partner-top">
             <h3 class="white-title">合作对象</h3>
             <div class="triangle"></div>
-            <ul class="partner-list">
+            <ul class="partner-list clearfix">
               <li v-for="item in partner">
                 <div class="list-partner">
                   <img :src="item.partnerIcon" alt="">
                   <p class="partnertitle"> {{item.partnerTitle}}</p>
+                  <div v-if="item.show" class="partner-show">(连续八期)</div>
                 </div>
               </li>
             </ul>
@@ -86,7 +88,7 @@
           <div class="top income-top">
             <h3 class="white-title">商家收益</h3>
             <div class="triangle"></div>
-            <ul class="income-list">
+            <ul class="income-list clearfix">
               <li v-for="item in income">
                 <div class="income-icon">
                   <img :src="item.incomeIcon" alt="">
@@ -105,12 +107,12 @@
           <div class="top category-top">
             <h3 class="white-title">合作类别</h3>
             <div class="triangle"></div>
-            <ul class="category-list">
-              <li v-for="item in category">
+            <ul class="category-list clearfix">
+              <li v-for="(item, index) in category">
                 <div class="list-category">
                   <img :src="item.categoryIcon" alt="">
                   <p class="category-title">{{item.categoryTitle}}</p>
-                  <button class="view-datail">查看详情</button>
+                  <button class="view-detail" @click="popupBlock(index)">查看详情</button>
                 </div>
               </li>
             </ul>
@@ -126,7 +128,7 @@
             <h3 class="white-title">合作流程</h3>
             <div class="triangle"></div>
             <div class="cooperationProcess">
-              <img src="../../static/images/online_retailers/cooperationProcess.jpg" alt="">
+              <img src="..\..\static\images\online_retailers\cooperationProcess.jpg" alt="">
             </div>
           </div>
         </div>
@@ -136,7 +138,7 @@
           <div class="top trademark-top">
             <h3 class="white-title">合作品牌</h3>
             <div class="triangle"></div>
-            <ul class="trademark-list">
+            <ul class="trademark-list clearfix">
               <li v-for="item in trademark">
                 <div class="trademark-icon">
                   <img :src="item.trademarkIcon" alt="">
@@ -149,7 +151,7 @@
 
         <div class="questions block">
           <h3 class="black-title">常见问题</h3>
-          <ul class="issue-list">
+          <ul class="issue-list clearfix">
             <li v-for="(item, index) in issue">
               <div class="question" @click="toggleActive(index)">
                 <span class="danger">Q{{index + 1}}：</span>
@@ -160,16 +162,36 @@
               </div>
             </li>
           </ul>
-          <button class="more-btn">查看更多</button>
+          <button class="more-btn" @click="viewMore">查看更多</button>
         </div>
         <!--常见问题 end-->
-        <router-link to="contact">
-          <div class="contact">
-            <span>联系我们</span>
-          </div>
-        </router-link>
+
+        <div class="contact" @click="Contact">
+          <span>联系我们</span>
+        </div>
         <!--联系我们 end-->
       </div>
+    </div>
+
+    <!--弹窗-->
+    <div v-show="isShow" class="popup">
+      <!--<ul class="popup">-->
+      <div class="popup-content">
+        <div class="popup-title">
+          <span class="pop-title">{{popup.title}}</span>
+          <span class="pop-close" @click="close()">&times</span>
+        </div>
+        <div class="popup-top">
+          <p class="pop-content">{{popup.content}}</p>
+          <div class="pop-bottom">
+            <p class="pop-content"><span class="pop-sidetitle">{{popup.Booth}}</span>{{popup.boothContent}}</p>
+            <p class="pop-content"><span class="pop-sidetitle">{{popup.Updete}}</span>{{popup.updateContent}}</p>
+            <p class="pop-content"><span class="pop-sidetitle">{{popup.Dynamic}}</span>{{popup.dynamicContent}}</p>
+            <p class="pop-content"><span class="pop-sidetitle">{{popup.ServiceCharge}}</span>{{popup.serviceContent}}</p>
+          </div>
+        </div>
+      </div>
+      <!--</ul>-->
     </div>
   </div>
 </template>
@@ -239,45 +261,58 @@ export default {
       awardList: [
         {
           awardIcon: '../../static/images/online_retailers/award-1.png',
-          awardTitle: '金米奖'
+          awardTitle: '金米奖',
+          awardUrl: 'https://zhuanlan.zhihu.com/p/24866699',
+          show: true
         },
         {
           awardIcon: '../../static/images/online_retailers/award-2.png',
-          awardTitle: '最美应用'
+          awardTitle: '最美应用',
+          awardUrl: 'http://zuimeia.com/app/4834/?platform=1',
+          show: true
         },
         {
           awardIcon: '../../static/images/online_retailers/award-3.png',
-          awardTitle: '极光奖'
+          awardTitle: '极光奖',
+          awardUrl: 'http://hf.appstore.vivo.com.cn/val/jiguang32/appstore/index?shareAppid=330&source=1',
+          show: true
         },
         {
           awardIcon: '../../static/images/online_retailers/award-4.png',
-          awardTitle: '搜狗好应用'
+          awardTitle: '搜狗好应用',
+          show: false
         }
       ],
       exposure: [
         {
           exposureIcon: '../../static/images/online_retailers/exposure-1.png',
-          exposureTitle: '猎云网'
+          exposureTitle: '猎云网',
+          exposureUrl: 'http://www.lieyunwang.com/archives/272095'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-2.png',
-          exposureTitle: '铅笔道'
+          exposureTitle: '铅笔道',
+          exposureUrl: 'http://www.lieyunwang.com/archives/272095'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-3.png',
-          exposureTitle: 'Pingwest'
+          exposureTitle: 'Pingwest',
+          exposureUrl: 'http://www.pingwest.com/one-day-cat/'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-4.png',
-          exposureTitle: '全媒派'
+          exposureTitle: '全媒派',
+          exposureUrl: 'https://mp.weixin.qq.com/s?src=3&timestamp=1500021035&ver=1&signature=Pv8qf67hO-AGUJlpgH7eA4RZsoW-OfNHdSaXzCrcr2Sb7Lwocqdp6V9KsM3c2CcGqTWAOXhaseIkaAv6wP3miC8CILr40g5tLPbjtkc-GE4TUtYyVYWMSO1q*t6Qd0aBq6KzqPNse3XBgb0Y2J26z4X450l4obeC08bPfr2Obmg='
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-5.png',
-          exposureTitle: '搜狐网'
+          exposureTitle: '搜狐网',
+          exposureUrl: 'http://www.sohu.com/a/121344842_544868'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-6.png',
-          exposureTitle: '泛钛氪'
+          exposureTitle: '泛钛氪',
+          exposureUrl: 'http://www.vantk.com/discussion/3290'
         }
       ],
       partner: [
@@ -287,7 +322,8 @@ export default {
         },
         {
           partnerIcon: '../../static/images/online_retailers/coldenPrize.png',
-          partnerTitle: '金牌卖家'
+          partnerTitle: '金牌卖家',
+          show: true
         },
         {
           partnerIcon: '../../static/images/online_retailers/goodBrand.png',
@@ -363,8 +399,68 @@ export default {
         {
           trademarkIcon: '../../static/images/online_retailers/cooperative-brand-09.png'
         }
+      ],
+      isShow: true,
+      popup: {},
+      popupbox: [
+        {
+          title: '免费领',
+          content: '商家按自然月提供500~5000单商品，一日猫平台引导优质宠物用户来免费领取合作的商品，相应提高商家电商指数。',
+          Booth: '严控展位：',
+          boothContent: '每个仅4个展位，确保单品转化率',
+          Updete: '定期更新：',
+          updateContent: '保证良性用户体验',
+          Dynamic: '动态放量：',
+          dynamicContent: '根据合作方时间需要，动态放量、补量',
+          ServiceCharge: '服务费：',
+          serviceContent: '每单4~15元，活动期间前1000单免服务费'
+        },
+        {
+          title: '特价购',
+          content: '商家按自然月提供500~5000单商品，一日猫平台引导优质宠物用户以专享价或返现下单合作的商品，相应提高商家电商指数。',
+          Booth: '严控展位：',
+          boothContent: '每个仅4个展位，确保单品转化率',
+          Updete: '定期更新：',
+          updateContent: '保证良性用户体验',
+          Dynamic: '动态放量：',
+          dynamicContent: '根据合作方时间需要，动态放量、补量',
+          ServiceCharge: '服务费：',
+          serviceContent: '每单4~15元，活动期间前1000单免服务费'
+        },
+        {
+          title: '老用户专享',
+          content: '月合作订单超过3000单的合作商，免费开通老用户专享。旨在激活合作商老用户，提供一个持续维系老用户的专享平台，提高关键电商指数。合作商接受平台提出的引流方案。',
+          Booth: '严控展位：',
+          boothContent: '每期仅1个展位，确保单品转化率',
+          Updete: '定期更新：',
+          updateContent: '保证良性用户体验',
+          Dynamic: '动态放量：',
+          dynamicContent: '根据合作方时间需要，动态放量、补量',
+          ServiceCharge: '服务费：',
+          serviceContent: '免服务费，商家帮助平台引流1万用户以上赠送活动专场+全网推送'
+        }
       ]
     }
+  },
+  methods: {
+    viewMore () {
+      this.$router.push('/issue')
+    },
+    Contact () {
+      this.$router.push('/contact')
+    },
+    popupBlock (index) {
+      this.popup = {}
+      this.popup = this.popupbox[index]
+      this.isShow = true
+    },
+    close () {
+      this.isShow = false
+    }
+  },
+  mounted () {
+    this.popup = this.popupbox[0]
+    document.body.clientHeight
   }
 }
 </script>
@@ -510,28 +606,55 @@ h3 {
 .list-award > img {
   width: 40px;
 }
-.view-datail {
+.view-detail {
   border: 1px solid #1e8be5;
   border-radius: 24px;
   height: 22px;
   width: 68px;
   font-size: 12px;
   color: #1e8be5;
-  line-height: 18px;
+  line-height: 22px;
   text-align: center;
   background: #fff;
 }
 
 /*媒体曝光 start*/
 .exposure-list {
-  padding: 34px 15px 0;
-  height: 340px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0 15px;
 }
 .exposure-list > li {
   width: 33%;
-  float: left;
-  
+  margin-top: 30px;
+  /*margin-left: 5px;*/
+  text-align: center;
 }
+
+.exposure-list > li .item {
+  margin: 0 22px;
+}
+.exposure-list > li img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.exposure-list .view-detail {
+  margin: 0 auto;
+}
+
+.exposure-list .title {
+  margin-bottom: 10px;
+  color: #777;
+  font-size: 12px;
+}
+
+.exposure-list > li .distance {
+  margin-bottom: 16px;
+}
+
 .list-exposure {
   text-align: center;
   height: 189px;
@@ -540,8 +663,8 @@ h3 {
 }
 .list-exposure > img {
   width: 100%;
-  height: 80px;
 }
+
 /*合作对象*/
 .partner {
   height: 160px;
@@ -562,10 +685,16 @@ h3 {
   color: #333;
   line-height: 20px;
 }
+.partner-show {
+  font-size: 12px;
+  color: #777;
+  line-height: 20px;
+}
 
 /*商家收益*/
 .income {
   height: 560px;
+  margin-bottom: 30px;
 }
 .income-list > li {
   height:60px;
@@ -584,7 +713,7 @@ h3 {
   float: left;
   width: 75%;
   text-align: left;
-  padding: 15px 0;
+  padding: 25px 0;
 }
 .income-title {
   /*margin-top: 15px;*/
@@ -714,5 +843,64 @@ h3 {
   margin: 0 auto;
   font-size: 18px;
   color: #fff; 
+}
+
+/*弹框 start*/
+.popup {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 750px;
+  margin: 0 auto;
+  padding-top: 16px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, .5)
+}
+
+.popup-content {
+  position: absolute;
+  top: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 346px;
+  background-color: #fff;
+  padding: 6px 15px 78px;
+  border-radius: 20px;
+}
+.popup-title {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 0;
+}
+.popup-title .popup-title {
+  font-size: 18px;
+  color: #111;
+  text-align: center;
+}
+.popup-title .pop-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  text-align: right;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+} 
+.popup-top {
+  padding: 20px 10px 0;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+}
+.popup-top .pop-content {
+  color: #333; 
+}
+.pop-bottom {
+  margin-top: 20px;
+}
+.popup-top .pop-sidetitle {
+  color: #f33d66;
 }
 </style>

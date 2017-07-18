@@ -39,7 +39,8 @@ function post (action, params = {}) {
         } catch (e) {
           msgArr = [msg]
         }
-        Vue.prototype.$message(msgArr.join(' '))
+        // Vue.prototype.$message(msgArr.join(' '))
+        console.error(msgArr.join(' '))
         reject(resp)
       }
     }, (error) => {

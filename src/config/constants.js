@@ -1,6 +1,6 @@
 import * as functions from './functions'
 
-const HOST_SITE = 'http://app-api.s1.natapp.cc'
+const HOST_SITE = 'http://threewater.s1.natapp.cc/'
 
 // 定义状态码
 const SUCCESS = 2000
@@ -16,8 +16,8 @@ const OFFICE_WEB_URL = 'http://ow365.cn/?i=' + OFFICE_WEB_ID + '&furl='
 const TOKEN_KEY = 'com.nutrition.backend.dsfsdfldsfdskfdsfldsfk'
 const USER_INFO_KEY = 'com.nutrition.backend.sdfwekldsfkwfkdsfjlwefkds'
 // const TOKEN = '18-WQMJgq2NVoxle912'
-const TOKEN = '1oNg-cGzbd5B6Xhng12'
-// const TOKEN = functions.lgetItem(TOKEN_KEY)
+// const TOKEN = '1oNg-cGzbd5B6Xhng12'
+const TOKEN = functions.lgetItem(TOKEN_KEY)
 const USER_INFO = functions.lgetItem(USER_INFO_KEY)
 
 // 富文本上传路径

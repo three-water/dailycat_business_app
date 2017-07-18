@@ -9,17 +9,17 @@
       <form action="">
         <div class="form-item">
           <label for="identity"><span class="danger">*</span>身份类型</label>
-          <select name="identity" v-model="form.identity">
+          <select v-model="form.storeType">
             <!--<option value="" disabled selected>请选择您的身份类型</option>-->
-            <option v-for="item in identity" :value="item.identity" :key="item.identity" :label="item.identity">{{item.name}}</option>
+            <option v-for="item in identity" :value="item.storeType" :key="item.storeType" :label="item.identity"></option>
           </select>
         </div>
 
         <div class="form-item">
-          <label for="category"><span class="danger">*</span>合作品类</label>
-          <select name="category" v-model="form.category">
+          <label for="category"><span class="danger">*</span>合作意向</label>
+          <select v-model="form.intentionType">
             <!--<option value="" disabled selected>请选择要合作的类别</option>-->
-            <option v-for="item in category" :value="item.category" :key="item.category" :label="item.category">{{item.name}}</option>
+            <option v-for="item in category" :value="item.intentionType" :key="item.intentionType" :label="item.category"></option>
           </select>
         </div>
 
@@ -35,7 +35,7 @@
 
         <div class="form-item">
           <label for="shop">公司/店铺</label>
-          <input name="shop" v-model="form.shop" placeholder="请输入您所在的公司或店铺名">
+          <input name="shop" v-model="form.storeName" placeholder="请输入您所在的公司或店铺名">
         </div>
 
         <div class="form-item">
@@ -43,11 +43,26 @@
           <input name="title" v-model="form.position" placeholder="请输入您的职务">
         </div>
 
-        <div class="form-item">
+        <!--<div class="form-item">
           <label for="area">所在地区</label>
-          <select name="area" v-model="form.area">
+          <select name="area" v-model="form.area">-->
             <!--<option value="" disabled selected>请选择</option>-->
+            <!--<address-picker v-model="addressValue" @change="addressChange" class="fl"></address-picker>
             <option v-for="item in area" :value="item.area" :key="item.area" :label="item.area">{{item.name}}</option>
+          </select>
+        </div>-->
+        <div class="form-item area">
+          <label for="province"><span class="danger">*</span>所在省份</label>
+          <select v-model="form.provinceCode" @change="getCityList(form.provinceCode)">
+            <option v-for="item in province" :value="item.code" :key="item.code" :label="item.name"></option>
+          </select>
+          <label for="area">所在城市</label>
+          <select v-model="form.cityCode" @click="handleJudge(1)" @change="getDistrictList(form.cityCode)">
+            <option v-for="item in city" :value="item.code" :key="item.code" :label="item.name"></option>
+          </select>
+          <label for="area">所在区县</label>
+          <select v-model="form.districtCode" @click="handleJudge(2)">
+            <option v-for="item in distrct" :value="item.code" :key="item.code" :label="item.name"></option>
           </select>
         </div>
 
@@ -64,35 +79,99 @@
 export default {
   data () {
     return {
-      category: [],
       area: [],
       form: {
-        identity: '',
-        category: '',
+        storeType: '',
+        intentionType: '',
         username: '',
         tel: '',
-        shop: '',
+        storeName: '',
         position: '',
-        area: ''
+        provinceCode: '',
+        cityCode: '',
+        districtCode: ''
       },
       identity: [
-        {identity: '身份证'},
-        {identity: '户口簿'}
-      ]
+        {
+          storeType: 1,
+          identity: '天猫商城卖家'
+        },
+        {
+          storeType: 2,
+          identity: '淘宝金牌卖家（连续八期）'
+        },
+        {
+          storeType: 3,
+          identity: '宠物用品品牌商'
+        }
+      ],
+      category: [
+        {
+          intentionType: 1,
+          category: '免费领'
+        },
+        {
+          intentionType: 2,
+          category: '特价购'
+        },
+        {
+          intentionType: 3,
+          category: '老用户专享'
+        }
+      ],
+      province: [],
+      city: [],
+      distrct: []
     }
   },
   methods: {
+    handleJudge (index) {
+      if (index === 1) {
+        if (!this.form.provinceCode) {
+          alert('请选择省份！')
+        }
+      } else if (index === 2) {
+        if (!this.form.cityCode) {
+          alert('请选择城市！')
+        }
+      }
+    },
+    getProvinceList () {
+      this.$post('provinceList').then(resp => {
+        if (resp.status === this.$SUCCESS) {
+          this.province = resp.data
+        }
+      })
+    },
+    getCityList (provinceCode) {
+      this.$post('cityList', {
+        provinceCode: provinceCode
+      }).then(resp => {
+        if (resp.status === this.$SUCCESS) {
+          this.city = resp.data
+        }
+      })
+    },
+    getDistrictList (cityCode) {
+      this.$post('districtList', {
+        cityCode: cityCode
+      }).then(resp => {
+        if (resp.status === this.$SUCCESS) {
+          this.distrct = resp.data
+        }
+      })
+    },
     onSubmit () {
-      if (!this.form.identity) {
+      if (!this.form.storeType) {
         alert('请选择您的身份类型！')
-      } else if (!this.form.category) {
-        alert('请选择要合作的类别！')
+      } else if (!this.form.intentionType) {
+        alert('请选择要合作的意向！')
       } else if (!this.form.username) {
         alert('请输入您的姓名！')
       } else if (!this.form.tel) {
         alert('请输入您的手机号！')
       } else {
-        this.$post('', this.form).then(resp => {
+        this.$post('businessCooperationCreate', this.form).then(resp => {
           if (resp.status === this.$SUCCESS) {
             alert('提交成功！')
             this.$router.back()
@@ -100,6 +179,9 @@ export default {
         })
       }
     }
+  },
+  mounted () {
+    this.getProvinceList()
   }
 }
 </script>
