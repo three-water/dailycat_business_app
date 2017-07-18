@@ -11,7 +11,7 @@
           <label for="identity"><span class="danger">*</span>身份类型</label>
           <select v-model="form.storeType">
             <!--<option value="" disabled selected>请选择您的身份类型</option>-->
-            <option v-for="item in identity" :value="item.storeType" :key="item.storeType" :label="item.identity"></option>
+            <option v-for="item in identity" :value="item.storeType" :key="item.storeType">{{item.identity}}</option>
           </select>
         </div>
 
@@ -19,7 +19,7 @@
           <label for="category"><span class="danger">*</span>合作意向</label>
           <select v-model="form.intentionType">
             <!--<option value="" disabled selected>请选择要合作的类别</option>-->
-            <option v-for="item in category" :value="item.intentionType" :key="item.intentionType" :label="item.category"></option>
+            <option v-for="item in category" :value="item.intentionType" :key="item.intentionType" >{{item.category}}</option>
           </select>
         </div>
 
@@ -55,19 +55,19 @@
           <div class="local">
             <label for="province"><span class="danger">*</span>省份</label>
             <select v-model="form.provinceCode" @change="getCityList(form.provinceCode)">
-              <option v-for="item in province" :value="item.code" :key="item.code" :label="item.name"></option>
+              <option v-for="item in province" :value="item.code" :key="item.code">{{item.name}}</option>
             </select>
           </div>
           <div class="local local-city">
             <label for="area">城市</label>
             <select v-model="form.cityCode" @click="handleJudge(1)" @change="getDistrictList(form.cityCode)">
-              <option v-for="item in city" :value="item.code" :key="item.code" :label="item.name"></option>
+              <option v-for="item in city" :value="item.code" :key="item.code" >{{item.name}}</option>
             </select>
           </div> 
           <div class="local">
             <label for="area">区县</label>
             <select v-model="form.districtCode" @click="handleJudge(2)">
-              <option v-for="item in distrct" :value="item.code" :key="item.code" :label="item.name"></option>
+              <option v-for="item in distrct" :value="item.code" :key="item.code">{{item.name}}</option>
             </select>
           </div> 
         </div>
