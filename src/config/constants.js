@@ -1,7 +1,6 @@
 import * as functions from './functions'
 
-const HOST_SITE = 'http://threewater.s1.natapp.cc/'
-process.env.NODE_ENV === 'production' ? 'https://api.yirimao.com/' : 'http://threewater.s1.natapp.cc/'
+const HOST_SITE = process.env.NODE_ENV === 'production' ? 'https://api.yirimao.com/' : 'http://threewater.s1.natapp.cc/'
 // 定义状态码
 const SUCCESS = 2000
 

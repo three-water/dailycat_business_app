@@ -134,11 +134,11 @@ export default {
     handleJudge (index) {
       if (index === 1) {
         if (!this.form.provinceCode) {
-          alert('请选择省份！')
+          MessageBox('请选择省份！')
         }
       } else if (index === 2) {
         if (!this.form.cityCode) {
-          alert('请选择城市！')
+          MessageBox('请选择城市！')
         }
       }
     },
@@ -170,21 +170,21 @@ export default {
     },
     onSubmit () {
       if (!this.form.storeType) {
-        alert('请选择您的身份类型！')
+        MessageBox('请选择您的身份类型！')
       } else if (!this.form.intentionType) {
-        alert('请选择要合作的意向！')
+        MessageBox('请选择要合作的意向！')
       } else if (!this.form.username) {
-        alert('请输入您的姓名！')
+        MessageBox('请输入您的姓名！')
       } else if (!this.form.tel) {
-        alert('请输入您的手机号！')
-      // } else if (!(/^1(3|4|5|7|8)\d{9}$/)) {
-      //   alert('请输入正确的手机号码！')
+        MessageBox('请输入您的手机号！')
+      } else if (!(/^1(3|4|5|7|8)\d{9}$/.test(this.form.tel))) {
+        MessageBox('请输入正确的手机号码！')
       } else if (!this.form.provinceCode) {
-        alert('请选择省份！')
+        MessageBox('请选择省份！')
       } else if (!this.form.cityCode) {
-        alert('请选择城市！')
+        MessageBox('请选择城市！')
       } else if (!this.form.districtCode) {
-        alert('请选择区县！')
+        MessageBox('请选择区县！')
       } else {
         this.$post('businessCooperationCreate', this.form).then(resp => {
           if (resp.status === this.$SUCCESS) {
