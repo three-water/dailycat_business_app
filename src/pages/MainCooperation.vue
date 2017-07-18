@@ -128,7 +128,7 @@
             <h3 class="white-title">合作流程</h3>
             <div class="triangle"></div>
             <div class="cooperationProcess">
-              <img src="..\..\static\images\online_retailers\cooperationProcess.jpg" alt="">
+              <img src="../../static/images/online_retailers/cooperationProcess.jpg" alt="">
             </div>
           </div>
         </div>
@@ -400,7 +400,7 @@ export default {
           trademarkIcon: '../../static/images/online_retailers/cooperative-brand-09.png'
         }
       ],
-      isShow: true,
+      isShow: false,
       popup: {},
       popupbox: [
         {

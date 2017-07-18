@@ -12,7 +12,7 @@ const Issue = resolve => require(['../pages/Issue'], resolve)
 const Contact = resolve => require(['../pages/Contact'], resolve)
 
 let routes = [
-  {name: MainCooperation, path: '/main-cooperation', component: MainCooperation},
+  {name: MainCooperation, path: '/', component: MainCooperation},
 
   // 常见问题
   {name: Issue, path: '/issue', component: Issue},
