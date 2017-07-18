@@ -5,7 +5,7 @@
       <ul class="issue-list">
         <li v-for="(item, index) in issue">
           <div class="question" @click="toggleActive(index)">
-            <span class="danger">Q{{index + 1}}：</span>
+            <span class="quest">Q{{index + 1}}：</span>
             <span class="detail">{{item.question}}</span>
             <span class="icon" :class="{active: item.active === true}">
               <img src="../../static/images/online_retailers/iconB.png" alt="icon">
@@ -102,12 +102,12 @@ export default {
   color: #333;
 }
 
-.danger {
+.quest {
   float: left;
   display: block;
   max-width: 40px;
   height: 100%;
-  color: #FF7A9A;
+  color: #8d5fa9;
 }
 
 @media screen and (max-width: 768px) {

@@ -34,12 +34,12 @@
         </div>
 
         <div class="form-item">
-          <label for="shop">公司/店铺</label>
+          <label for="shop"><span class="danger">*</span>公司/店铺</label>
           <input name="shop" v-model="form.storeName" placeholder="请输入您所在的公司或店铺名">
         </div>
 
         <div class="form-item">
-          <label for="duties">职务</label>
+          <label for="duties"><span class="danger">*</span>职务</label>
           <input name="title" v-model="form.position" placeholder="请输入您的职务">
         </div>
 
@@ -52,20 +52,25 @@
           </select>
         </div>-->
         <div class="form-item area">
-          <label for="province"><span class="danger">*</span>所在省份</label>
-          <select v-model="form.provinceCode" @change="getCityList(form.provinceCode)">
-            <option v-for="item in province" :value="item.code" :key="item.code" :label="item.name"></option>
-          </select>
-          <label for="area">所在城市</label>
-          <select v-model="form.cityCode" @click="handleJudge(1)" @change="getDistrictList(form.cityCode)">
-            <option v-for="item in city" :value="item.code" :key="item.code" :label="item.name"></option>
-          </select>
-          <label for="area">所在区县</label>
-          <select v-model="form.districtCode" @click="handleJudge(2)">
-            <option v-for="item in distrct" :value="item.code" :key="item.code" :label="item.name"></option>
-          </select>
+          <div class="local">
+            <label for="province"><span class="danger">*</span>省份</label>
+            <select v-model="form.provinceCode" @change="getCityList(form.provinceCode)">
+              <option v-for="item in province" :value="item.code" :key="item.code" :label="item.name"></option>
+            </select>
+          </div>
+          <div class="local local-city">
+            <label for="area">城市</label>
+            <select v-model="form.cityCode" @click="handleJudge(1)" @change="getDistrictList(form.cityCode)">
+              <option v-for="item in city" :value="item.code" :key="item.code" :label="item.name"></option>
+            </select>
+          </div> 
+          <div class="local">
+            <label for="area">区县</label>
+            <select v-model="form.districtCode" @click="handleJudge(2)">
+              <option v-for="item in distrct" :value="item.code" :key="item.code" :label="item.name"></option>
+            </select>
+          </div> 
         </div>
-
       </form>
 
       <div class="claim"><span class="danger">*</span>为必填项，请如实填写，便于一日猫与您联系</div>
@@ -76,6 +81,7 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
 export default {
   data () {
     return {
@@ -140,6 +146,7 @@ export default {
       this.$post('provinceList').then(resp => {
         if (resp.status === this.$SUCCESS) {
           this.province = resp.data
+          this.$forceUpdate()
         }
       })
     },
@@ -170,10 +177,27 @@ export default {
         alert('请输入您的姓名！')
       } else if (!this.form.tel) {
         alert('请输入您的手机号！')
+      // } else if (!(/^1(3|4|5|7|8)\d{9}$/)) {
+      //   alert('请输入正确的手机号码！')
+      } else if (!this.form.provinceCode) {
+        alert('请选择省份！')
+      } else if (!this.form.cityCode) {
+        alert('请选择城市！')
+      } else if (!this.form.districtCode) {
+        alert('请选择区县！')
       } else {
         this.$post('businessCooperationCreate', this.form).then(resp => {
           if (resp.status === this.$SUCCESS) {
-            alert('提交成功！')
+            // Toast({
+            //   message: '提交成功',
+            //   position: 'middle',
+            //   duration: 3000
+            // })
+            MessageBox({
+              title: '提示',
+              message: '提交成功',
+              showConfirmButton: true
+            })
             this.$router.back()
           }
         })
@@ -187,6 +211,23 @@ export default {
 </script>
 
 <style scoped>
+/*省市区*/
+.area {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+}
+.area .local {
+  width: 33%;
+}
+.area .local-city {
+  margin: 0 2px;
+}
+/*.area option {
+  color: red;
+}*/
+
+
 .container {
   padding: 10px 20px;
   max-width: 750px;
@@ -206,7 +247,7 @@ export default {
   position: absolute;
   top: 20px;
   left: 0;
-  width: 142px;
+  width: 150px;
   font-size: 14px;
   font-weight: bold;
   color: #8d5fa9;

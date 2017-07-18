@@ -9,7 +9,7 @@
         <div class="advantage">
           <h3 class="black-title">平台优势</h3>
           <ul class="advantage-list clearfix">
-            <li v-for="item in advantage">
+            <li v-for="item in advantage" :key="item.advaTitle">
               <div class="list-info">
                 <p class="adva-title">{{item.advaTitle}}</p>
                 <div class="adva-content">{{item.advantage}}</div>
@@ -25,7 +25,7 @@
         <div class="info block">
           <h3 class="black-title">平台数据</h3>
           <ul class="info-list clearfix">
-            <li v-for="item in info">
+            <li v-for="item in info" :key="item.infoTitle">
               <div class="list-info">
                 <img :src="item.infoIcon" alt="">
                 <p class="info-title">{{item.infoTitle}}</p>
@@ -40,7 +40,7 @@
           <h3 class="black-title">应用获奖</h3>
           <p class="small-title">来自各大应用商店和榜单的肯定</p>
           <ul class="award-list clearfix">
-            <li v-for="item in awardList">
+            <li v-for="item in awardList" :key="item.awardTitle">
               <div class="list-award">
                 <img :src="item.awardIcon" alt="">
                 <p class="small-title">{{item.awardTitle}}</p>
@@ -55,7 +55,7 @@
           <h3 class="black-title">媒体曝光</h3>
           <p class="small-title">来自众多媒体平台的肯定</p>
           <ul class="exposure-list clearfix">
-            <li v-for="item in exposure">
+            <li v-for="item in exposure" :key="item.exposureTitle">
               <div class="item">
                 <img :src="item.exposureIcon" :alt="item.exposureIcon"
                 class="distance">
@@ -72,7 +72,7 @@
             <h3 class="white-title">合作对象</h3>
             <div class="triangle"></div>
             <ul class="partner-list clearfix">
-              <li v-for="item in partner">
+              <li v-for="item in partner" :key="item.partnerTitle">
                 <div class="list-partner">
                   <img :src="item.partnerIcon" alt="">
                   <p class="partnertitle"> {{item.partnerTitle}}</p>
@@ -89,7 +89,7 @@
             <h3 class="white-title">商家收益</h3>
             <div class="triangle"></div>
             <ul class="income-list clearfix">
-              <li v-for="item in income">
+              <li v-for="item in income" :key="item.incomeTitle">
                 <div class="income-icon">
                   <img :src="item.incomeIcon" alt="">
                 </div>
@@ -108,11 +108,12 @@
             <h3 class="white-title">合作类别</h3>
             <div class="triangle"></div>
             <ul class="category-list clearfix">
-              <li v-for="(item, index) in category">
+              <li v-for="(item, index) in category" :key="item.categoryTitle">
                 <div class="list-category">
                   <img :src="item.categoryIcon" alt="">
                   <p class="category-title">{{item.categoryTitle}}</p>
                   <button class="view-detail" @click="popupBlock(index)">查看详情</button>
+                  <div v-if="item.ishow" class="tag">专属</div>
                 </div>
               </li>
             </ul>
@@ -139,7 +140,7 @@
             <h3 class="white-title">合作品牌</h3>
             <div class="triangle"></div>
             <ul class="trademark-list clearfix">
-              <li v-for="item in trademark">
+              <li v-for="item in trademark" :key="item.trademarkIcon">
                 <div class="trademark-icon">
                   <img :src="item.trademarkIcon" alt="">
                 </div>
@@ -152,9 +153,9 @@
         <div class="questions block">
           <h3 class="black-title">常见问题</h3>
           <ul class="issue-list clearfix">
-            <li v-for="(item, index) in issue">
+            <li v-for="(item, index) in issue" :key="item.question">
               <div class="question" @click="toggleActive(index)">
-                <span class="danger">Q{{index + 1}}：</span>
+                <span class="quest">Q{{index + 1}}：</span>
                 <span class="detail">{{item.question}}</span>
               </div>
               <div class="answer">
@@ -292,7 +293,7 @@ export default {
         {
           exposureIcon: '../../static/images/online_retailers/exposure-2.png',
           exposureTitle: '铅笔道',
-          exposureUrl: 'http://www.lieyunwang.com/archives/272095'
+          exposureUrl: 'https://www.pencilnews.cn/p/12978.html'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-3.png',
@@ -302,7 +303,7 @@ export default {
         {
           exposureIcon: '../../static/images/online_retailers/exposure-4.png',
           exposureTitle: '全媒派',
-          exposureUrl: 'https://mp.weixin.qq.com/s?src=3&timestamp=1500021035&ver=1&signature=Pv8qf67hO-AGUJlpgH7eA4RZsoW-OfNHdSaXzCrcr2Sb7Lwocqdp6V9KsM3c2CcGqTWAOXhaseIkaAv6wP3miC8CILr40g5tLPbjtkc-GE4TUtYyVYWMSO1q*t6Qd0aBq6KzqPNse3XBgb0Y2J26z4X450l4obeC08bPfr2Obmg='
+          exposureUrl: 'http://news.qq.com/original/dujiabianyi/chuanmeiyechanshiguan.html'
         },
         {
           exposureIcon: '../../static/images/online_retailers/exposure-5.png',
@@ -360,15 +361,18 @@ export default {
       category: [
         {
           categoryIcon: '../../static/images/online_retailers/freePresent.png',
-          categoryTitle: '免费领'
+          categoryTitle: '免费领',
+          ishow: false
         },
         {
           categoryIcon: '../../static/images/online_retailers/discount.png',
-          categoryTitle: '特价够'
+          categoryTitle: '特价购',
+          ishow: false
         },
         {
           categoryIcon: '../../static/images/online_retailers/private.png',
-          categoryTitle: '老用户专享'
+          categoryTitle: '老用户专享',
+          ishow: true
         }
       ],
       trademark: [
@@ -610,7 +614,7 @@ h3 {
   border: 1px solid #1e8be5;
   border-radius: 24px;
   height: 22px;
-  width: 68px;
+  width: 55px;
   font-size: 12px;
   color: #1e8be5;
   line-height: 22px;
@@ -737,10 +741,24 @@ h3 {
 .category-list > li {
   width: 33%;
   float: left;
+  position: relative;
 }
 .list-category > img {
   width: 60px;
   height: 60px;
+}
+.tag {
+  display: inline-block;
+  width: 35px;
+  border-radius:16px;
+  background:#f8a751;
+  color:#fff;
+  font-size:10px;
+  line-height:20px;
+  text-align:center;
+  position: absolute;
+  left: 52%;
+  bottom: 43%;
 }
 .category-title {
   font-size: 14px;
@@ -806,7 +824,7 @@ h3 {
   margin-top:  30px;
 }
 
-.danger {
+.quest {
   color: #8d5fa9;
 }
 

@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Mint from 'mint-ui'
+import 'mint-ui/lib/style.css'
 
 Vue.use(Router)
+Vue.use(Mint)
 
 const MainCooperation = resolve => require(['../pages/MainCooperation'], resolve)
 
